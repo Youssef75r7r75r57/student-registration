@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>تسجيل الطلاب | مدرس التاريخ</title>
+  <meta name="description" content="استمارة تسجيل الطلاب في مادة التاريخ">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600&family=Reem+Kufi:wght@500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --lapis: #0f2347;
+      /* لازورد داكن */
+      --lapis-2: #1b3a76;
+      --gold: #c8a04c;
+      /* ذهبي */
+      --gold-dark: #a9822f;
+      --turq: #168a8f;
+      /* فيروزي */
+      --stone: #f3f4f7;
+      --paper: #ffffff;
+      --ink: #142036;
+      --muted: #5d6b82;
+      --line: #d9dee8;
+      --danger: #b8362b;
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    html,
+    body {
+      margin: 0
+    }
+
+    body {
+      font-family: "IBM Plex Sans Arabic", Tahoma, Arial, sans-serif;
+      color: var(--ink);
+      background: var(--stone);
+      line-height: 1.75;
+    }
+
+    .page {
+      display: grid;
+      grid-template-columns: minmax(340px, 430px) 1fr;
+      min-height: 100vh
+    }
+
+    /* ============ اللوحة الجانبية (لازوردي) ============ */
+    .panel {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      align-self: start;
+      background:
+        radial-gradient(120% 70% at 100% 0%, rgba(200, 160, 76, .20), transparent 60%),
+        linear-gradient(180deg, var(--lapis) 0%, #0b1a37 100%);
+      color: #fff;
+      padding: 44px 40px 32px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cartouche {
+      position: relative;
+      align-self: flex-start;
+      margin-inline-end: 14px;
+      border: 2px solid var(--gold);
+      border-radius: 999px;
+      padding: 6px 28px 8px;
+      font-family: "Reem Kufi", serif;
+      font-weight: 600;
+      font-size: 1.45rem;
+      color: #f3dca3;
+      line-height: 1.5;
+    }
+
+    .cartouche::after {
+      content: "";
+      position: absolute;
+      inset-block: -7px;
+      inset-inline-end: -11px;
+      width: 2px;
+      background: var(--gold);
+    }
+
+    .role {
+      margin: 10px 0 0;
+      color: #b9c4dc;
+      font-size: .95rem
+    }
+
+    .panel h1 {
+      font-family: "Reem Kufi", serif;
+      font-weight: 700;
+      font-size: 2.35rem;
+      line-height: 1.35;
+      margin: 46px 0 10px;
+    }
+
+    .panel .lead {
+      margin: 0 0 36px;
+      color: #c3cde2;
+      max-width: 30ch
+    }
+
+    .eras {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      position: relative
+    }
+
+    .eras li {
+      position: relative;
+      padding-inline-start: 40px;
+      padding-bottom: 22px;
+      opacity: .5;
+      transition: opacity .4s
+    }
+
+    .eras li::before {
+      content: "";
+      position: absolute;
+      inset-inline-start: 0;
+      top: 6px;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, .45);
+      background: transparent;
+      transition: all .4s;
+    }
+
+    .eras li::after {
+      content: "";
+      position: absolute;
+      inset-inline-start: 8px;
+      top: 28px;
+      bottom: -4px;
+      width: 2px;
+      background: rgba(255, 255, 255, .18);
+    }
+
+    .eras li:last-child {
+      padding-bottom: 0
+    }
+
+    .eras li:last-child::after {
+      display: none
+    }
+
+    .eras b {
+      display: block;
+      font-family: "Reem Kufi", serif;
+      font-weight: 600;
+      font-size: 1.15rem;
+      line-height: 1.6
+    }
+
+    .eras small {
+      display: block;
+      color: #b9c4dc;
+      font-size: .82rem;
+      margin-top: -2px
+    }
+
+    .eras li.on {
+      opacity: 1
+    }
+
+    .eras li.on::before {
+      background: var(--gold);
+      border-color: var(--gold);
+      box-shadow: 0 0 0 5px rgba(200, 160, 76, .22)
+    }
+
+    .eras li.on::after {
+      background: var(--gold)
+    }
+
+    .eras li.on b {
+      color: #f3dca3
+    }
+
+    .panel .note {
+      margin-top: auto;
+      padding-top: 28px;
+      color: #93a1bf;
+      font-size: .8rem
+    }
+
+    /* ============ جانب النموذج ============ */
+    .main {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 56px 32px
+    }
+
+    .form-wrap {
+      width: 100%;
+      max-width: 540px
+    }
+
+    .rule {
+      height: 10px;
+      margin-bottom: 26px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='26' height='10'%3E%3Cpath d='M0 5h26' stroke='%23c8a04c' stroke-opacity='.45'/%3E%3Cpath d='M13 0l5 5-5 5-5-5z' fill='%23c8a04c'/%3E%3C/svg%3E") repeat-x center;
+    }
+
+    .form-head h2 {
+      font-family: "Reem Kufi", serif;
+      font-size: 1.9rem;
+      margin: 0;
+      color: var(--lapis);
+      line-height: 1.4
+    }
+
+    .form-head p {
+      margin: 2px 0 28px;
+      color: var(--muted);
+      font-size: .95rem
+    }
+
+    fieldset {
+      border: 0;
+      margin: 0 0 30px;
+      padding: 0
+    }
+
+    legend {
+      font-family: "Reem Kufi", serif;
+      font-weight: 600;
+      color: var(--lapis-2);
+      font-size: 1.1rem;
+      padding: 0 0 8px;
+      margin-bottom: 14px;
+      width: 100%;
+      border-bottom: 1.5px solid var(--line);
+    }
+
+    .field {
+      margin-bottom: 18px
+    }
+
+    label.l {
+      display: block;
+      font-weight: 500;
+      font-size: .95rem;
+      margin-bottom: 6px
+    }
+
+    input[type=text],
+    input[type=tel],
+    select {
+      width: 100%;
+      font: inherit;
+      font-size: 1rem;
+      color: var(--ink);
+      background: var(--paper);
+      border: 1.5px solid var(--line);
+      border-radius: 8px;
+      padding: 12px 14px;
+      min-height: 50px;
+      transition: border-color .15s, box-shadow .15s;
+    }
+
+    select {
+      appearance: none;
+      padding-inline-end: 14px;
+      padding-left: 40px;
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' fill='none' stroke='%231b3a76' stroke-width='2'%3E%3Cpath d='M1 1.5l6 6 6-6'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: left 14px center;
+    }
+
+    input::placeholder {
+      color: #9aa6ba
+    }
+
+    input[type=tel] {
+      direction: ltr;
+      text-align: right
+    }
+
+    input:focus,
+    select:focus {
+      outline: none;
+      border-color: var(--lapis-2);
+      box-shadow: 0 0 0 3px rgba(200, 160, 76, .45)
+    }
+
+    .invalid {
+      border-color: var(--danger) !important
+    }
+
+    .err {
+      font-size: .83rem;
+      color: var(--danger);
+      min-height: 1.3em;
+      margin-top: 3px
+    }
+
+    .gender {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px
+    }
+
+    .gender>div {
+      position: relative
+    }
+
+    .gender input {
+      position: absolute;
+      opacity: 0;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+      margin: 0
+    }
+
+    .gender label {
+      display: block;
+      margin: 0;
+      text-align: center;
+      padding: 12px;
+      min-height: 50px;
+      border: 1.5px solid var(--line);
+      border-radius: 8px;
+      background: var(--paper);
+      font-weight: 500;
+      transition: all .15s;
+      pointer-events: none;
+    }
+
+    .gender input:checked+label {
+      background: var(--lapis);
+      border-color: var(--lapis);
+      color: #f3dca3
+    }
+
+    .gender input:focus-visible+label {
+      box-shadow: 0 0 0 3px rgba(200, 160, 76, .55)
+    }
+
+    .hp {
+      position: absolute;
+      left: -9999px;
+      height: 0;
+      overflow: hidden
+    }
+
+    .btn {
+      width: 100%;
+      font: inherit;
+      font-family: "Reem Kufi", serif;
+      font-weight: 700;
+      font-size: 1.25rem;
+      cursor: pointer;
+      border: 0;
+      border-radius: 8px;
+      padding: 13px;
+      min-height: 56px;
+      background: var(--gold);
+      color: var(--lapis);
+      transition: background .15s, transform .05s;
+    }
+
+    .btn:hover {
+      background: #d4ae5c
+    }
+
+    .btn:active {
+      transform: translateY(1px)
+    }
+
+    .btn:disabled {
+      opacity: .65;
+      cursor: wait
+    }
+
+    .btn:focus-visible {
+      outline: 3px solid var(--lapis);
+      outline-offset: 3px
+    }
+
+    .msg {
+      display: none;
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 8px;
+      font-size: .92rem;
+      background: #fbe9e7;
+      color: var(--danger);
+      border: 1px solid #f1c3bd
+    }
+
+    .msg.show {
+      display: block
+    }
+
+    .done {
+      display: none;
+      text-align: center;
+      padding: 30px 0
+    }
+
+    .done.show {
+      display: block
+    }
+
+    .seal {
+      width: 84px;
+      height: 84px;
+      margin: 0 auto 18px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      border: 2px solid var(--gold);
+      color: var(--gold-dark);
+      font-size: 2.4rem;
+      position: relative;
+    }
+
+    .seal::before {
+      content: "";
+      position: absolute;
+      inset: 6px;
+      border: 1px solid var(--gold);
+      border-radius: 50%;
+      opacity: .5
+    }
+
+    .done h2 {
+      font-family: "Reem Kufi", serif;
+      color: var(--lapis);
+      font-size: 1.9rem;
+      margin: 0 0 6px
+    }
+
+    .done p {
+      margin: 0 0 22px;
+      color: var(--muted)
+    }
+
+    .ghost {
+      font: inherit;
+      font-weight: 500;
+      cursor: pointer;
+      background: transparent;
+      color: var(--lapis-2);
+      border: 1.5px solid var(--lapis-2);
+      border-radius: 8px;
+      padding: 10px 24px;
+    }
+
+    .ghost:hover {
+      background: var(--lapis-2);
+      color: #fff
+    }
+
+    /* ============ الموبايل ============ */
+    @media (max-width:860px) {
+      .page {
+        display: block
+      }
+
+      .panel {
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        height: auto;
+        padding: 12px 16px 14px;
+        box-shadow: 0 4px 14px rgba(15, 35, 71, .25)
+      }
+
+      .panel h1,
+      .role {
+        display: none
+      }
+
+      .cartouche {
+        font-size: 1.05rem;
+        padding: 3px 22px 4px
+      }
+
+      .eras {
+        display: flex;
+        margin-top: 12px
+      }
+
+      .panel h1 {
+        font-size: 1.65rem;
+        margin: 22px 0 4px
+      }
+
+      .panel .lead,
+      .panel .note,
+      .eras small {
+        display: none
+      }
+
+      .eras li {
+        flex: 1;
+        padding: 28px 2px 0;
+        text-align: center
+      }
+
+      .eras li::before {
+        inset-inline-start: auto;
+        right: 50%;
+        transform: translateX(50%);
+        top: 0;
+        width: 16px;
+        height: 16px
+      }
+
+      .eras li::after {
+        inset-inline-start: auto;
+        top: 7px;
+        bottom: auto;
+        height: 2px;
+        width: auto;
+        right: 50%;
+        left: -50%
+      }
+
+      .eras b {
+        font-size: .78rem;
+        line-height: 1.4
+      }
+
+      .main {
+        padding: 28px 18px 48px
+      }
+
+      .form-head h2 {
+        font-size: 1.6rem
+      }
+    }
+
+    @media (prefers-reduced-motion:reduce) {
+      * {
+        transition: none !important
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <aside class="panel">
+      <div class="cartouche" id="teacherName">أ. احمد مصطفي</div>
+      <p class="role" id="teacherRole">مدرس التاريخ</p>
+
+      <h1>رحلتك مع التاريخ تبدأ من هنا</h1>
+      <p class="lead">أكمل بيانات التسجيل وسنتواصل معك بعد الانتهاء.</p>
+
+      <ol class="eras" id="eras" aria-label="تقدم ملء الاستمارة">
+        <li data-k="name"><b>البداية</b><small>اسم الطالب</small></li>
+        <li data-k="grade"><b>المرحلة</b><small>الصف الدراسي</small></li>
+        <li data-k="gender"><b>الهوية</b><small>الجنس</small></li>
+        <li data-k="studentPhone"><b>التواصل</b><small>هاتف الطالب</small></li>
+        <li data-k="parentPhone"><b>المتابعة</b><small>هاتف ولي الأمر</small></li>
+      </ol>
+
+      <div class="note">تُستخدم البيانات للتواصل مع الطالب وولي الأمر فقط.</div>
+    </aside>
+
+    <main class="main">
+      <div class="form-wrap">
+        <div class="rule" aria-hidden="true"></div>
+
+        <form id="form" novalidate autocomplete="off">
+          <div class="form-head">
+            <h2>استمارة تسجيل طالب</h2>
+            <p>جميع الحقول مطلوبة.</p>
+          </div>
+
+          <fieldset>
+            <legend>بيانات الطالب</legend>
+
+            <div class="field">
+              <label class="l" for="name">اسم الطالب (ثلاثي)</label>
+              <input type="text" id="name" name="name" placeholder="مثال: أحمد محمد علي" required>
+              <div class="err" data-for="name"></div>
+            </div>
+
+            <div class="field">
+              <label class="l" for="grade">الصف الدراسي</label>
+              <select id="grade" name="grade" required>
+                <option value="">اختر الصف…</option>
+                <optgroup label="المرحلة الابتدائية">
+                  <option>الصف الأول الابتدائي</option>
+                  <option>الصف الثاني الابتدائي</option>
+                  <option>الصف الثالث الابتدائي</option>
+                  <option>الصف الرابع الابتدائي</option>
+                  <option>الصف الخامس الابتدائي</option>
+                  <option>الصف السادس الابتدائي</option>
+                </optgroup>
+                <optgroup label="المرحلة الإعدادية">
+                  <option>الصف الأول الإعدادي</option>
+                  <option>الصف الثاني الإعدادي</option>
+                  <option>الصف الثالث الإعدادي</option>
+                </optgroup>
+                <optgroup label="المرحلة الثانوية">
+                  <option>الصف الأول الثانوي</option>
+                  <option>الصف الثاني الثانوي</option>
+                  <option>الصف الثالث الثانوي</option>
+                </optgroup>
+              </select>
+              <div class="err" data-for="grade"></div>
+            </div>
+
+            <div class="field">
+              <span class="l" id="gl"
+                style="display:block;font-weight:500;font-size:.95rem;margin-bottom:6px">الجنس</span>
+              <div class="gender" role="radiogroup" aria-labelledby="gl">
+                <div><input type="radio" name="gender" id="g1" value="ذكر"><label for="g1">ذكر</label></div>
+                <div><input type="radio" name="gender" id="g2" value="أنثى"><label for="g2">أنثى</label></div>
+              </div>
+              <div class="err" data-for="gender"></div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>أرقام التواصل</legend>
+
+            <div class="field">
+              <label class="l" for="studentPhone">هاتف الطالب</label>
+              <input type="tel" id="studentPhone" name="studentPhone" inputmode="numeric" maxlength="11"
+                placeholder="01XXXXXXXXX" required>
+              <div class="err" data-for="studentPhone"></div>
+            </div>
+
+            <div class="field">
+              <label class="l" for="parentPhone">هاتف ولي الأمر</label>
+              <input type="tel" id="parentPhone" name="parentPhone" inputmode="numeric" maxlength="11"
+                placeholder="01XXXXXXXXX" required>
+              <div class="err" data-for="parentPhone"></div>
+            </div>
+          </fieldset>
+
+          <div class="hp" aria-hidden="true"><input type="text" name="website" tabindex="-1" autocomplete="off"></div>
+
+          <button type="submit" class="btn" id="submit">تسجيل الطالب</button>
+          <div class="msg" id="msg" role="alert"></div>
+        </form>
+
+        <div class="done" id="done" role="status">
+          <div class="seal" aria-hidden="true">✓</div>
+          <h2>تم التسجيل بنجاح</h2>
+          <p id="doneText">تم حفظ بيانات الطالب.</p>
+          <button type="button" class="ghost" id="again">تسجيل طالب آخر</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // ================= الإعدادات (عدّل هنا فقط) =================
+    const CONFIG = {
+      SCRIPT_URL: "https://script.google.com/macros/s/AKfycbz_KnR_Qj8igzpjwjF50pRzXxhCKWb8gByJU_rfgxF5_f9UbTeawfyW74meZGfr1oL7ng/exec", // رابط Google Apps Script (Web App)
+      teacherName: "أ. احمد مصطفي",              // اسم المدرس
+      teacherRole: "مدرس التاريخ"                // الوصف تحت الاسم
+    };
+    // ===========================================================
+
+    const $ = id => document.getElementById(id);
+    $("teacherName").textContent = CONFIG.teacherName;
+    $("teacherRole").textContent = CONFIG.teacherRole;
+    document.title = "تسجيل الطلاب | " + CONFIG.teacherName;
+
+    const form = $("form"), msg = $("msg"), btn = $("submit");
+    const eras = [...document.querySelectorAll("#eras li")];
+
+    const toEn = s => s.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d))
+      .replace(/[۰-۹]/g, d => "۰۱۲۳۴۵۶۷۸۹".indexOf(d));
+    const phoneOk = v => /^01[0125]\d{8}$/.test(v);
+
+    ["studentPhone", "parentPhone"].forEach(id => {
+      $(id).addEventListener("input", e => { e.target.value = toEn(e.target.value).replace(/\D/g, ""); });
+    });
+
+    const val = {
+      name: () => $("name").value.trim().split(/\s+/).filter(Boolean).length >= 3,
+      grade: () => !!$("grade").value,
+      gender: () => !!form.querySelector('input[name="gender"]:checked'),
+      studentPhone: () => phoneOk($("studentPhone").value),
+      parentPhone: () => phoneOk($("parentPhone").value) && $("parentPhone").value !== $("studentPhone").value
+    };
+
+    function updateEras() {
+      eras.forEach(li => li.classList.toggle("on", val[li.dataset.k]()));
+    }
+    form.addEventListener("input", updateEras);
+    form.addEventListener("change", updateEras);
+
+    function setErr(name, text) {
+      const el = document.querySelector(`[data-for="${name}"]`);
+      if (el) el.textContent = text || "";
+      const inp = $(name); if (inp) inp.classList.toggle("invalid", !!text);
+    }
+
+    function validate(d) {
+      let ok = true;
+      ["name", "grade", "gender", "studentPhone", "parentPhone"].forEach(k => setErr(k, ""));
+      if (!val.name()) { setErr("name", "اكتب الاسم ثلاثيًا على الأقل."); ok = false; }
+      if (!d.grade) { setErr("grade", "اختر الصف الدراسي."); ok = false; }
+      if (!d.gender) { setErr("gender", "اختر الجنس."); ok = false; }
+      if (!phoneOk(d.studentPhone)) { setErr("studentPhone", "رقم غير صحيح. يجب أن يتكون من 11 رقمًا ويبدأ بـ 010 أو 011 أو 012 أو 015."); ok = false; }
+      if (!phoneOk(d.parentPhone)) { setErr("parentPhone", "رقم غير صحيح. يجب أن يتكون من 11 رقمًا ويبدأ بـ 010 أو 011 أو 012 أو 015."); ok = false; }
+      else if (d.studentPhone === d.parentPhone) { setErr("parentPhone", "رقم ولي الأمر يجب أن يختلف عن رقم الطالب."); ok = false; }
+      return ok;
+    }
+
+    const showMsg = t => { msg.textContent = t; msg.classList.add("show"); };
+
+    // إضاءة العصور بالتتابع عند النجاح
+    function celebrate() {
+      const slow = !matchMedia("(prefers-reduced-motion: reduce)").matches;
+      eras.forEach((li, i) => setTimeout(() => li.classList.add("on"), slow ? i * 160 : 0));
+    }
+
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      msg.classList.remove("show");
+      const fd = new FormData(form);
+      if (fd.get("website")) return;
+
+      const data = {
+        name: fd.get("name").trim().replace(/\s+/g, " "),
+        grade: fd.get("grade"),
+        gender: fd.get("gender") || "",
+        studentPhone: toEn(fd.get("studentPhone")).trim(),
+        parentPhone: toEn(fd.get("parentPhone")).trim()
+      };
+      if (!validate(data)) return;
+
+      if (CONFIG.SCRIPT_URL.startsWith("PASTE_")) {
+        showMsg("لم يتم ربط الموقع بالشيت بعد. ضع رابط Web App في SCRIPT_URL داخل ملف index.html.");
+        return;
+      }
+
+      btn.disabled = true; btn.textContent = "جاري الحفظ…";
+      try {
+        const res = await fetch(CONFIG.SCRIPT_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(data)
+        });
+        const out = await res.json();
+        if (out.status === "ok") {
+          $("doneText").textContent = "تم حفظ بيانات الطالب: " + data.name;
+          form.style.display = "none"; $("done").classList.add("show");
+          form.reset(); eras.forEach(li => li.classList.remove("on")); celebrate();
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        } else {
+          showMsg(out.message || "حدث خطأ أثناء الحفظ. حاول مرة أخرى.");
+        }
+      } catch (err) {
+        showMsg("تعذر الاتصال بالخادم. تأكد من الإنترنت ثم حاول مرة أخرى.");
+      } finally {
+        btn.disabled = false; btn.textContent = "تسجيل الطالب";
+      }
+    });
+
+    $("again").addEventListener("click", () => {
+      $("done").classList.remove("show"); form.style.display = "";
+      eras.forEach(li => li.classList.remove("on")); $("name").focus();
+    });
+  </script>
+</body>
+
+</html>
